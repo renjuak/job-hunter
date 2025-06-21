@@ -1,8 +1,10 @@
 name: job-hunter-daily
+
 on:
   schedule:
-    - cron: "0 14 * * *"   # 14:00 UTC ≈ 7 AM PT
-  workflow_dispatch:    
+    - cron: "0 14 * * *"    # 07:00 PT every day
+  workflow_dispatch:        # enables the “Run workflow” button
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -10,16 +12,32 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install poetry
-      - run: poetry install --no-root
-      - run: poetry run scrape-stripe
-      - run: poetry run embed-jobs
-      - run: poetry run match-stripe my-resume > matches.txt
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install project deps
+        run: poetry install --no-root
+
+      - name: Scrape Stripe jobs
+        run: poetry run scrape-stripe
+
+      - name: Embed job descriptions
+        run: poetry run python -m job_hunter.matching.embed_jobs
+
+      - name: Match résumé vs jobs
+        run: |
+          poetry run match-stripe my-resume > matches.txt
+          echo '### Top Matches' >> $GITHUB_STEP_SUMMARY
+          cat matches.txt        >> $GITHUB_STEP_SUMMARY
+
       #- name: Send email
       #  uses: dawidd6/action-send-mail@v3
       #  with:  
