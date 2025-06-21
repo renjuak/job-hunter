@@ -20,15 +20,15 @@ jobs:
       - run: poetry run scrape-stripe
       - run: poetry run embed-jobs
       - run: poetry run match-stripe my-resume > matches.txt
-      - name: Send email
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.EMAIL_USER }}
-          password: ${{ secrets.EMAIL_PASS }}
-          to: you@gmail.com
-          subject: "Your top job matches – ${{ github.run_id }}"
-          body: |
-            $(cat matches.txt)
+      #- name: Send email
+      #  uses: dawidd6/action-send-mail@v3
+      #  with:  
+      #    server_address: smtp.gmail.com
+      #    server_port: 465
+      #    username: ${{ secrets.EMAIL_USER }}
+      #    password: ${{ secrets.EMAIL_PASS }}
+      #    to: you@gmail.com
+      #    subject: "Your top job matches – ${{ github.run_id }}"
+      #    body: |
+      #      $(cat matches.txt)
 
