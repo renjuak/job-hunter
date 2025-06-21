@@ -1,0 +1,1 @@
+# job_hunter/scrapers/__init__.py 

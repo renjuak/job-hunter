@@ -1,0 +1,128 @@
+R E N J U   K O D I Y A T
+
++412.327.3344 · renju.ak@gmail.com · linkedin.com/in/renjuak/· San Francisco Bay Area, CA
+
+PRODUCT LEADER
+
+Customer-driven Product leader with over 12 years of experience leading the 0-1 strategy, development,
+and deployment of cutting-edge features in customer workflows. Passionate about
+transforming industries through solutions that drive productivity, customer engagement and business impact.
+Known for hands-on leadership, deep technical acumen, and exceptional cross-functional collaboration.
+
+PROFESSIONAL EXPERIENCE
+
+Xero, Inc.
+Head of Product, Insights & AI
+
+January 2024 - Present
+
+Led a 3 member PM team to drive Xero wide AI/ML efforts collaborating with product, engineering and data
+science teams to evaluate and integrate AI models and develop product roadmaps, resulting in 6% market share. 
+
+Led the team for the development of Xero's first GenAI-powered accounting co-pilot and chat assistant, which
+reduced customer time spent on analyzing data by 67%.
+Pioneered NLP-based search for Xero's accounting software,  saving users ~20% of their time when retrieving
+transactions.
+Spearheaded auto-reconciliation of bank feeds, saving customers approximately 9 hours per month on
+average in manual reconciliation tasks.
+Established AI labs to accelerate innovation, to build early-stage AI features and driving  adoption resulting in
+7 successfully incubated ideas.  
+
+Intuit
+Lead Product Manager
+
+August 2019 - October 2023
+
+Led the Insights team and drove the product strategy for a 4 member PM team for AI-enabled features within
+QuickBooks Online (QBO) driving Advanced subscription growth by 4X. 
+
+Drove the ideation to launch of Custom Reports Builder, a querying and reporting tool that resulted in 80%
+engagement from users and contributed to transitioning 60% of legacy reporting features used by 4M+ users.
+Conceptualized and launched the Performance Center, delivering proactive insights into KPIs for small
+business owners, resulting in 95% positive user feedback and 40% engagement.
+Led cross-functional teams to deliver (0-1) advanced data visualization tools that boosted engagement by
+users on QBO, directly contributing to revenue growth in mid-market segments.
+Developed patent for reporting tool, focusing on new ways to organize data across linked tables for enhanced
+user experiences.
+
+Ellie Mae
+Product Lead, Data & AI/ML 
+
+June 2017 - July 2019
+
+Responsible for driving EM’s Data & AI / ML efforts across the company working with X-functional product teams
+
+Managed 0-1 development of analytics platform, driving the strategy and roadmap for mortgage industry
+analytics products, helping clients make data-driven decisions resulting in ~$6m/yr revenue.
+Led the development of AI/ML solutions for the mortgage industry, including a Fair Lending model that
+identified potential pricing violations and saved millions in damages.
+Spearheaded the ML-based lead prioritization system for Ellie Mae's lead management software, increasing
+conversion rates by 30%.
+
+GE Digital
+Staff Technical Product Manager
+
+May 2016 - June 2017
+
+Led the Predix Data Science team to build critical AI/ML apps for GE Digital’s clients
+
+Drove the development of predictive maintenance solutions for industrial clients, including a multi-million
+dollar project for elevator IoT connectivity, resulting in $2.5M in savings.
+Coordinated machine learning and deep learning solutions for GE's industrial cloud platform, Predix, to
+improve operational efficiency and reduce downtime.
+Developed edge analytics apps to predict supplier delays, saving clients $1.1M in expedited delivery costs.
+
+Zeta Global
+Sr. Product Manager
+
+July 2015 - May 2016
+
+Led the team to build critical features for Data Management Paltform (DMP) for a high-growth startup
+
+Created and shipped key features for cross-channel marketing campaigns, including media planning,
+analytics reporting, and customer segmentation resulting in 2X customer growth. 
+Built analytics for campaign evaluation, improving efficiency and reducing campaign cycle time from 2-3
+weeks to 2 days.
+Optimized advertiser workflow on the Marketing Cloud and Data Management Platform (DMP), driving
+performance improvements and enabling faster campaign execution.
+
+Cognizant Technology Solutions
+Product Manager (Consulting)
+
+Aug 2014 - July 2015
+
+Managed product features for Ebay's SMB seller platforms, improving user experience and increasing
+segment revenue by 20%.
+Led Agile development initiatives to deliver improved user interfaces and reporting solutions for major US
+online marketplace clients.
+
+Infosys Inc.
+Sr. Software Engineer
+
+Aug 2004 - July 2012
+
+Managed tech support for Apple's Identity Management products, maintaining high CSATs and SLAs.
+Led the development of highly scalable applications for Apple and BT, driving customer growth and revenue
+with consistent product delivery.
+Proposed and executed new client solutions, generating ~$500K in additional revenue and expanding
+Infosys's account base.
+
+Carnegie Mellon University, Tepper School of Business
+Master of Business Administration in Information Systems, Marketing, and Strategy 
+
+EDUCATION
+
+University of Kerala, TKM College of Engineering 
+Bachelor of Technology in Computer Science
+
+Machine Learning  - Stanford University | Product Management - Pragmatic Institute |  PyTorch Certification.
+Patent : Org of data from linked tables in an Analytics/ Reporting UI : PR-2312707USPRV · Filed May 26, 2023
+
+CERTIFICATIONS
+
+SKILLS
+AI/ ML , C, Gen AI, Agentic AI, Google BigQuery, Java, LLM, Machine Learning, ML infrastructure, Model fine- tuning,
+Model integration, NLP, Analytics/ Reporting UI, Performance evaluation, PL/ SQL, Product Management, Prompt
+engineering strategies, Python, PyTorch, Splunk, SPSS, SQL, Tableau, TensorFlow, X-functional team leadership
+
+

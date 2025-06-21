@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "job-hunter"
+version = "0.1.0"
+description = "A job hunting assistant with resume embedding and storage capabilities"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "job_hunter"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+openai = "^1.0.0"
+supabase = "^2.0.0"
+python-dotenv = "^1.0.0"
+pydantic = "^2.0.0"
+requests = "^2.32.4"
+pdfminer-six = "^20250506"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+pytest-cov = "^4.0.0"
+black = "^23.0.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=job_hunter --cov-report=term-missing" 
+
+[tool.poetry.scripts]
+match-stripe = "job_hunter.reports.cli_match:main"
+scrape-stripe = "job_hunter.run_scrape:main"
+pdf-to-txt = "job_hunter.resume.pdf_to_text:pdf_to_txt"
