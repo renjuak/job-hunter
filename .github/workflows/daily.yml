@@ -2,6 +2,7 @@ name: job-hunter-daily
 on:
   schedule:
     - cron: "0 14 * * *"   # 14:00 UTC ≈ 7 AM PT
+  workflow_dispatch:    
 jobs:
   run:
     runs-on: ubuntu-latest
