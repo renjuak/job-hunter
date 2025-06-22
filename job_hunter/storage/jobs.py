@@ -3,6 +3,9 @@ from job_hunter.models import JobPost
 from job_hunter.storage.db import get_supabase_client
 
 def upsert_jobs(jobs: list[JobPost]) -> None:
+    if not jobs:            # ← early-return prevents PGRST100
+        return
+    
     supa = get_supabase_client()
     payload = [j.dict() for j in jobs]
     supa.table("jobs").upsert(payload, on_conflict="job_id").execute()
