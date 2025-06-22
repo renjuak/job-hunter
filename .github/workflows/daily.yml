@@ -26,8 +26,8 @@ jobs:
       - name: Install project deps
         run: poetry install --no-root
 
-      - name: Scrape Stripe jobs
-        run: poetry run scrape-stripe
+      - name: Scrape all jobs
+        run: poetry run scrape-all
 
       - name: Embed job descriptions
         run: poetry run python -m job_hunter.matching.embed_jobs
