@@ -20,6 +20,7 @@ import asyncio, yaml, pathlib
 from job_hunter.resolve_board import resolve
 from job_hunter.scrapers import get_scraper
 from job_hunter.storage.jobs import upsert_jobs
+from job_hunter.config import load_env; load_env()
 
 CFG = pathlib.Path(__file__).resolve().parents[1] / "config" / "companies.yml"
 
@@ -34,6 +35,10 @@ async def main():
     companies = yaml.safe_load(CFG.read_text())
     await asyncio.gather(*(scrape_one(c) for c in companies))
 
-if __name__ == "__main__":
+# NEW: sync wrapper for Poetry entry-point
+def cli():
     asyncio.run(main())
+
+if __name__ == "__main__":
+    cli()
 
