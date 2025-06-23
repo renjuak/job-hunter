@@ -2,7 +2,13 @@
 locations:
   - "remote"
   - "san francisco"
+  - "san jose"
+  - "palo alto"
+  - "mountain view"
 
 titles:
-  - "machine learning"
-  - "ml engineer"
+  - "Product Manager"
+  - "Senior Product Manager"
+  - "Principal Product Manager"
+  - "Director of Product"
+  - "Head of Product"
