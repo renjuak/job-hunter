@@ -11,6 +11,7 @@ from supabase import create_client, Client
 from pydantic import BaseModel
 from job_hunter.models import ResumeEmbedding          # <— changed
 from pathlib import Path
+import json                
 from job_hunter.config import load_env
 load_env()                           #  ← add this right after imports
 
@@ -75,39 +76,33 @@ def upsert_resume_embedding(embedding: ResumeEmbedding) -> Dict[str, Any]:
     except Exception as e:
         raise Exception(f"Failed to upsert resume embedding: {str(e)}")
 
-def get_resume_embedding(resume_id: str) -> Optional[ResumeEmbedding]:
+def _to_vec(v):
+    """Convert pgvector text -> list[float] if needed."""
+    return json.loads(v) if isinstance(v, str) else v
+
+def get_resume_embedding(resume_id: str) -> ResumeEmbedding | None:
     """
-    Retrieve a resume embedding from Supabase.
-    
-    Args:
-        resume_id: Unique identifier for the resume
-        
-    Returns:
-        ResumeEmbedding object if found, None otherwise
-        
-    Raises:
-        Exception: If the retrieval operation fails
+    Retrieve a résumé embedding row and return a ResumeEmbedding model,
+    coercing the 'embedding' pgvector into a list[float].
     """
-    try:
-        supabase = get_supabase_client()
-        
-        result = supabase.table("resume_embeddings").select("*").eq(
-            "resume_id", resume_id
-        ).execute()
-        
-        if result.data:
-            data = result.data[0]
-            return ResumeEmbedding(
-                resume_id=data["resume_id"],
-                text=data["text"],
-                embedding=data["embedding"],
-                metadata=data.get("metadata", {})
-            )
-        
+    supa = get_supabase_client()
+    res = (
+        supa.table("resume_embeddings")
+            .select("*")
+            .eq("resume_id", resume_id)
+            .single()
+            .execute()
+            .data
+    )
+    if not res:
         return None
-        
-    except Exception as e:
-        raise Exception(f"Failed to retrieve resume embedding: {str(e)}")
+
+    return ResumeEmbedding(
+        resume_id = res["resume_id"],
+        text      = res["text"],
+        embedding = _to_vec(res["embedding"]),   # ← fix
+        metadata  = res.get("metadata", {}),
+    )
 
 def delete_resume_embedding(resume_id: str) -> bool:
     """

@@ -1,57 +1,40 @@
-# job_hunter/matching/rank.py
 from __future__ import annotations
-from math import sqrt
-import json                              # ← add this
-from typing import Sequence, List, Tuple
-from job_hunter.config import load_env; load_env()
+import json, yaml, pathlib
+from typing import List, Tuple
 from job_hunter.storage.db import get_supabase_client
+from job_hunter.matching.job_agent import judge
 
-def _to_vec(v) -> List[float]:
-    """Convert PostgREST pgvector output to list[float]."""
-    if isinstance(v, str):
-        # pgvector serialises as "[0.12,0.34,...]" which is valid JSON
-        return json.loads(v)
-    return v  # already a list
+# --------------------------------------------------------------------
+CFG = yaml.safe_load((pathlib.Path(__file__).parents[2] / "config" / "prefs.yml").read_text())
+LOC_KEYWORDS  = [k.lower() for k in CFG["locations"]]
+TITLE_KEYWORDS= [k.lower() for k in CFG["titles"]]
 
-# ---------- low-level helper --------------------------------------------------
-def _cosine(a: Sequence[float], b: Sequence[float]) -> float:
-    dot   = sum(x * y for x, y in zip(a, b))
-    mag_a = sqrt(sum(x * x for x in a))
-    mag_b = sqrt(sum(y * y for y in b))
-    return dot / (mag_a * mag_b) if mag_a and mag_b else 0.0
-
-
-# ---------- high-level API ----------------------------------------------------
-def top_matches(
-    resume_id: str,
-    k: int = 20,
-    threshold: float = 0.55,
-) -> List[Tuple[str, float]]:
+# --------------------------------------------------------------------
+def top_matches(resume_id: str, k: int = 20, shortlist: int = 80) -> List[Tuple[str, float]]:
     supa = get_supabase_client()
 
-    # résumé vector ------------------------------------------
-    res_row = (
-        supa.table("resume_embeddings")
-            .select("embedding")
-            .eq("resume_id", resume_id)
-            .execute()
-            .data
-    )
-    if not res_row:
-        raise ValueError(f"Résumé '{resume_id}' not found")
-    resume_vec = _to_vec(res_row[0]["embedding"])
+    # Résumé JSON (skills + years) ----------------------------------
+    r_meta = supa.table("resume_embeddings").select("metadata") \
+                 .eq("resume_id", resume_id).single().execute().data["metadata"]
 
-    # job vectors ---------------------------------------------
-    rows = (
-        supa.table("job_embeddings")
-            .select("job_id, vector")
-            .execute()
-            .data
-    )
+    # Jobs -----------------------------------------------------------
+    jobs = supa.table("jobs").select("job_id,title,location,description").execute().data
 
-    scored = [
-        (row["job_id"], _cosine(resume_vec, _to_vec(row["vector"])))
-        for row in rows
-    ]
+    # 1) deterministic pre-filter (location & title only) -----------
+    cand = []
+    for j in jobs:
+        title = (j["title"] or "").lower()
+        loc   = (j["location"] or "").lower()
+        if LOC_KEYWORDS and not any(k in loc   for k in LOC_KEYWORDS):  continue
+        if TITLE_KEYWORDS and not any(k in title for k in TITLE_KEYWORDS): continue
+        cand.append(j)
+    cand = cand[:shortlist]              # keep cost bounded
+
+    # 2) LLM scoring -------------------------------------------------
+    scored = []
+    for j in cand:
+        score, _ = judge(r_meta, j)
+        scored.append((j["job_id"], score))
+
     scored.sort(key=lambda t: t[1], reverse=True)
-    return [(jid, s) for jid, s in scored if s >= threshold][:k]
+    return scored[:k]

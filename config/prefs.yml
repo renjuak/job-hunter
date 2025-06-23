@@ -1,0 +1,8 @@
+# Only *human* inputs the program still needs
+locations:
+  - "remote"
+  - "san francisco"
+
+titles:
+  - "machine learning"
+  - "ml engineer"
