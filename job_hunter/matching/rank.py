@@ -42,8 +42,8 @@ def top_matches(
             .execute()
             .data["metadata"]
     )
-    resume_years  = r_meta["years"]
-    resume_skills = {s.lower() for s in r_meta["skills"]}
+    resume_years  = r_meta.get("years", 0)
+    resume_skills = {s.lower() for s in r_meta.get("skills", [])}
 
     # ----------------------------------------------------------------
     # All jobs from DB
