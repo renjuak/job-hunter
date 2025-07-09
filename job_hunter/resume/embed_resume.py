@@ -26,7 +26,8 @@ def embed_resume_text(resume_id: str, text: str, metadata: dict | None = None):
     # ----- checksum short-circuit ---------------------------------
     digest = sha256_text(text)
     existing = supa.table("resume_embeddings").select("sha256") \
-                   .eq("resume_id", resume_id).single().execute().data
+                   .eq("resume_id", resume_id).limit(1).execute().data
+    existing = existing[0] if existing else None
     if existing and existing["sha256"] == digest:
         print("Résumé unchanged – skipping re-embed")
         return get_resume_embedding(resume_id)
