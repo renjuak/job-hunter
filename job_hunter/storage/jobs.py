@@ -2,14 +2,28 @@
 from job_hunter.models import JobPost
 from job_hunter.storage.db import get_supabase_client
 
-def upsert_jobs(jobs: list[JobPost]) -> None:
-    if not jobs:            # ← early-return prevents PGRST100
+def upsert_jobs(jobs: list[JobPost], batch_size: int = 500) -> None:
+    """
+    • De-duplicate by job_id (last occurrence wins)
+    • Push rows to Supabase in batches ≤ batch_size
+    """
+    if not jobs:
         return
-    
-    supa = get_supabase_client()
-    payload = [j.dict() for j in jobs]
-    supa.table("jobs").upsert(payload, on_conflict="job_id").execute()
 
+    # 1️⃣  collapse duplicates
+    uniq: dict[str, JobPost] = {}
+    for j in jobs:
+        uniq[j.job_id] = j
+
+    rows = [j.dict() for j in uniq.values()]
+    supa = get_supabase_client()
+
+    # 2️⃣  chunked UPSERT (avoids PostgREST 21000 + large-payload issues)
+    for i in range(0, len(rows), batch_size):
+        supa.table("jobs") \
+            .upsert(rows[i : i + batch_size], on_conflict="job_id") \
+            .execute()
+        
 def fetch_jobs_without_embeddings() -> list[JobPost]:
     supa = get_supabase_client()
     # left join to find jobs not yet embedded
