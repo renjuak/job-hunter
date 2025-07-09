@@ -22,7 +22,7 @@ from job_hunter.storage.db import get_supabase_client, get_resume_embedding
 
 def embed_resume_text(resume_id: str, text: str, metadata: dict | None = None):
     supa = get_supabase_client()            # ← ADD this before using `supa`
-
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     # ----- checksum short-circuit ---------------------------------
     digest = sha256_text(text)
     existing = supa.table("resume_embeddings").select("sha256") \

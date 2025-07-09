@@ -5,6 +5,8 @@ from job_hunter.storage.db import get_supabase_client
 from job_hunter.matching.job_agent        import judge
 from job_hunter.matching.seniority_agent  import level_for, needed_years
 from job_hunter.matching.job_requirements import extract_requirements
+from job_hunter.matching.requirement_agent import judge_requirements  
+
 
 # --------------------------------------------------------------------#
 # Configuration                                                       #
@@ -95,13 +97,38 @@ def top_matches(
         if not (salary_ok or bigtech_ok or exp_ok):
             continue
 
-        # Stage-4  • hard requirements (all must be present)
-        required = {r.lower() for r in req["required"]}
-        overlap  = len(required & resume_skills) / (len(required) or 1)
-        if overlap < 0.60:            # ← tweak 0.60→0.50 for even looser match
-          continue
+        # ---------- Stage-4 • LLM requirements reasoning -------------------
+        # cache lookup ------------------------------------------------
+        cache_row = (
+            supa.table("requirement_judgements")
+                .select("ok")
+                .eq("resume_id", resume_id)
+                .eq("job_id", j["job_id"])
+                .limit(1)
+                .execute()
+                .data
+        )
+        if cache_row:
+            ok = cache_row[0]["ok"]
+        else:
+            req_text     = "; ".join(req["required"])[:600]            # keep prompt small
+            resume_snip  = r_meta.get("summary","")[:1000] + \
+                           "\nSkills: " + ", ".join(r_meta["skills"][:30])
+
+            result = judge_requirements(resume_snip, req_text)
+            ok     = bool(result.get("ok"))
+            supa.table("requirement_judgements").upsert({
+                "resume_id": resume_id,
+                "job_id":    j["job_id"],
+                "ok":        ok,
+                "reason":    result.get("reason",""),
+            }).execute()
+
+        if not ok:
+            continue
 
         survivors.append(j)
+
 
     # ----------------------------------------------------------------
     # Stage-5  • GPT-4o holistic scoring
