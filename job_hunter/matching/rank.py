@@ -96,9 +96,10 @@ def top_matches(
             continue
 
         # Stage-4  • hard requirements (all must be present)
-        missing = {r.lower() for r in req["required"]} - resume_skills
-        if missing:
-            continue
+        required = {r.lower() for r in req["required"]}
+        overlap  = len(required & resume_skills) / (len(required) or 1)
+        if overlap < 0.60:            # ← tweak 0.60→0.50 for even looser match
+          continue
 
         survivors.append(j)
 
