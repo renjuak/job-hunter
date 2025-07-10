@@ -7,8 +7,19 @@ from job_hunter.storage.jobs import fetch_jobs_without_embeddings
 from job_hunter.storage.job_embeddings import upsert_job_embeddings
 from openai import OpenAI
 import os
+import tiktoken                            # new dep for accurate length
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+ENC = tiktoken.encoding_for_model("text-embedding-3-small")
+MAX_TOKENS = 6000                         # safe head-room (< 8192)
+
+def _truncate(text: str) -> str:
+    """Keep only the first MAX_TOKENS tokens of text."""
+    tokens = ENC.encode(text)
+    if len(tokens) <= MAX_TOKENS:
+        return text
+    return ENC.decode(tokens[:MAX_TOKENS])
+
 
 def embed_all_jobs(batch_size: int = 96) -> None:
     jobs = fetch_jobs_without_embeddings()

@@ -18,6 +18,7 @@ pyyaml = "^6.0.2"
 selectolax = "^0.3.30"
 httpx = "^0.28.1"
 feedparser = "^6.0.11"
+tiktoken = "^0.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
